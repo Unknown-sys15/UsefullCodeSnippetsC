@@ -1,0 +1,49 @@
+///////////////////////////////NOT TESTED YET\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
+int Debounce_count = 0;
+uint8_t Get_Button_State(void){
+     uint8_t result = 0;
+     static uint8_t button_1_state = 0;          // must be static
+
+   if (BUTTON1){
+      Debounce_count ++;
+      if(Debounce_count >= 2 && BUTTON1){
+          button_1_state = 1;
+          Debounce_count = 0;
+      }
+   }
+     
+   else if (BUTTON2){
+      Debounce_count ++;
+      if(Debounce_count >= 2 && BUTTON2){
+          button_2_state = 1;
+          Debounce_count = 0;
+      }
+   }
+   else {
+       Debounce_count = 0;
+       button_1_state = 0;
+       button_2_state = 0;
+   }
+
+   result |= button_1_state | button_2_state << 1;
+
+   return result;
+}
+
+ uint8_t Get_Button_Press(void){
+     uint8_t result = 0;
+     uint8_t state = 0;
+     static uint8_t previous_state = 0;
+
+     state = Get_Button_State();
+     result = ~state & previous_state;
+     previous_state = state;
+     return result;
+     
+}
+
+
+////////////CODE FOR MAIN\\\\\\\\\\\\\\
+if (Get_Button_Press() = 0x01){
+                //button 1 is pressed
+        }
