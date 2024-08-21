@@ -1,49 +1,72 @@
-///////////////////////////////NOT TESTED YET\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\\
-int Debounce_count = 0;
-uint8_t Get_Button_State(void){
-     uint8_t result = 0;
-     static uint8_t button_1_state = 0;          // must be static
+//pin pulled low when button is pressed
+// 3 buttons are present
 
-   if (BUTTON1){
-      Debounce_count ++;
-      if(Debounce_count >= 2 && BUTTON1){
+int Debounce_count = 0;
+unsigned int Get_Button_State(void){
+     unsigned int result = 0;
+     static unsigned int button_1_state = 0;          // treba dat v static
+     static unsigned int button_2_state = 0;
+     static unsigned int button_3_state = 0;
+
+   if (~Btn1){
+      if(Debounce_count >= 2 && ~Btn1){
           button_1_state = 1;
           Debounce_count = 0;
       }
    }
-     
-   else if (BUTTON2){
-      Debounce_count ++;
-      if(Debounce_count >= 2 && BUTTON2){
+
+   else if (~Btn2){
+      if(Debounce_count >= 2 && ~Btn2){
           button_2_state = 1;
           Debounce_count = 0;
       }
    }
+
+   else if (~Btn3){
+      if(Debounce_count >= 2 && ~Btn3){
+          button_3_state = 1;
+          Debounce_count = 0;
+      }
+   }
+
    else {
        Debounce_count = 0;
        button_1_state = 0;
        button_2_state = 0;
+       button_3_state = 0;
    }
 
-   result |= button_1_state | button_2_state << 1;
+   Debounce_count++;
+   result |= button_1_state | button_2_state << 1 | button_3_state << 2;     //sestavi izhod 0b100 ce je tretji pritisnjen
 
    return result;
 }
-
- uint8_t Get_Button_Press(void){
-     uint8_t result = 0;
-     uint8_t state = 0;
-     static uint8_t previous_state = 0;
+//-------------------------------------------------------------------------
+ unsigned int Get_Button_Press(void){
+     unsigned int result = 0;
+     unsigned int state = 0;
+     static unsigned int previous_state = 0;
 
      state = Get_Button_State();
      result = ~state & previous_state;
      previous_state = state;
      return result;
-     
 }
 
 
+
+
+///////////////////////////////////////
 ////////////CODE FOR MAIN\\\\\\\\\\\\\\
+///////////////////////////////////////
+
+
 if (Get_Button_Press() = 0x01){
                 //button 1 is pressed
+        }
+if (Get_Button_Press() = 0x02){
+                //button 2 is pressed
+        }
+if (Get_Button_Press() = 0x04){     //100
+                //button 3 is pressed
         }
