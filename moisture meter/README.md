@@ -1,2 +1,2 @@
 hc711 moisture and temp sensor
-developed using MikroC
+***Simple multitasking application***
